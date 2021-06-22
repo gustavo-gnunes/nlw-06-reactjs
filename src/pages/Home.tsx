@@ -1,6 +1,12 @@
 // para fazer uma rota qdo eu não tenho a tag a "Link", e sim um botão
 import { useHistory } from 'react-router-dom';
-import { auth,firebase } from '../sevices/firebase';
+
+// recuperar o valor do Contexto
+// import { useContext } from 'react';
+// importar o contexto, para usar
+// import { AuthContext } from '../contexts/AuthContext';
+// deixo de imortar o useContext e AuthContext, para importar o useAuth, que tem essas duas importações já importadas nele
+import { useAuth } from '../hooks/useAuth';
 
 import illustrationImg from '../assets/images/illustration.svg';
 import logoImg from '../assets/images/logo.svg';
@@ -12,18 +18,16 @@ import '../styles/auth.scss';
 
 export function Home() {
   const history = useHistory();
+  const { user, signInWithGoogle } = useAuth();
 
-  // fazer interação com o firebase
-  function handleCreateRoom() {
-    // fazer autenticação do usuário com o google
-    const provider = new firebase.auth.GoogleAuthProvider();
+  
+  async function handleCreateRoom() {
+    // se o usuário não estiver conectado, chama o método signInWithGoogle
+    if (!user) {
+      await signInWithGoogle();
+    } 
 
-    // auth.signInWithPopup(provider)-> para abrir o login do google como um popup e não redirecionar para tela d google e depois voltar para aplicação
-    // then(result-> depois que o usuário faz o login, tem um resultado retornando todas as informação do usuário, como nome, email, token e varios outros
-    auth.signInWithPopup(provider).then(result => {
-
-      history.push('/rooms/new'); // passar a rota pra onde vai acessar
-    });
+    history.push('/rooms/new'); // passar a rota pra onde vai acessar
   }
 
   return (

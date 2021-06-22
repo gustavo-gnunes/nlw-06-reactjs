@@ -1,14 +1,22 @@
 import { Link } from 'react-router-dom';
 
+// recuperar o valor do Contexto
+// import { useContext } from 'react';
+// importar o contexto, para usar
+// import { AuthContext } from '../contexts/AuthContext';
+// deixo de imortar o useContext e AuthContext, para importar o useAuth, que tem essas duas importações já importadas nele
+/////// import { useAuth } from '../hooks/useAuth';
+
 import illustrationImg from '../assets/images/illustration.svg';
 import logoImg from '../assets/images/logo.svg';
-import googleIconImg from '../assets/images/google-icon.svg';
 
 import { Button } from '../componets/Button';
 
 import '../styles/auth.scss';
 
 export function NewRoom() {
+  // const { user } = useAuth();
+
   return (
     <div id="page-auth">
       <aside>
