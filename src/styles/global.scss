@@ -1,0 +1,16 @@
+/* para colocar o arquivo css com extenção scss "sass", deve instalar o pacote yarn add node-sass@^5.0.0 */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f8f8f8;
+  color: #29292e;
+}
+
+body, input, button, textarea {
+  font: 400 16px 'Roboto', sans-serif;
+}

@@ -21,5 +21,8 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-export const auth = firebase.auth();
-export const database = firebase.database();
+const auth = firebase.auth();
+const database = firebase.database();
+
+// exporta o firebase, para qdo chamar o auth ou databse em outra página, não precisar importar o firebase
+export { firebase, auth, database };

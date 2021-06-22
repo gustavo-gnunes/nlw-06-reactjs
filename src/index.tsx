@@ -4,6 +4,8 @@ import App from './App';
 
 import './sevices/firebase'; // inicializar a conexão com o BD
 
+import './styles/global.scss';
+
 ReactDOM.render(
   <React.StrictMode>
     <App />
