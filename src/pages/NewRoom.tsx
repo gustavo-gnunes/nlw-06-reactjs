@@ -41,6 +41,7 @@ export function NewRoom() {
     const roomRef = database.ref('rooms');
 
     // pega dentro do BD uma referência chamada rooms e dentro dela faz um push dos dados da sala
+    // salva dados dentro de uma lista já existente
     const firebaseRoom = await roomRef.push({
       title: newRoom,
       authId: user?.id,
