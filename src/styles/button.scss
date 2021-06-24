@@ -19,6 +19,13 @@
     margin-right: 8px;
   }
 
+  // qdo o botão estiver com a className como outlined, fazer está estilização
+  &.outlined {
+    background: #fff;
+    border: 1px solid #835afd;
+    color: #835afd;
+  }
+
   // somente aplica o hover se o botão não estiver desabilitado
   &:not(:disabled):hover {
     filter: brightness(0.9); // escurece um pouco a cor
