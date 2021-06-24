@@ -62,19 +62,27 @@ export function Room() {
     };
 
     // salvar a pergunta no BD. ${roomId}-> é emqual sala vai gravar essa pergunta. push()-> gravar essa question dentro da sala
-    await database.ref(`rooms/${roomId}/question`).push(question);
+    await database.ref(`rooms/${roomId}/questions`).push(question);
 
     // assim que enviar a pergunta, apagar o que o usuário escreveu
     setNewQuestion('');
   }
 
   // dar um like em uma determinada pergunta
-  async function handleLikeQuestion(questionId: string) {
-    // grvar no BD um like em uma determinada pergunta
-    // PushManager({})-> para mandar para o BD como um objeto
-    await database.ref(`rooms/${roomId}/questions/${questionId}/likes`).push({
-      authorId: user?.id,
-    })
+  async function handleLikeQuestion(questionId: string, likeId: string | undefined) {
+    // para ver se o usuário já deu o like na pergunta ou não
+    // se deu o like e clicar novamente no ícone, vai remover. Caso não deu o like, add o like
+    if (likeId) {
+      // remove o like
+      await database.ref(`rooms/${roomId}/questions/${questionId}/likes/${likeId}`).remove();
+    } else {
+      // grava o like
+      // gravar no BD um like em uma determinada pergunta
+      // PushManager({})-> para mandar para o BD como um objeto
+      await database.ref(`rooms/${roomId}/questions/${questionId}/likes`).push({
+        authorId: user?.id,
+      });
+    }
   }
 
   return (
@@ -136,13 +144,14 @@ export function Room() {
                 {/* o que vem aqui dentro é chamado de children */}
                 {/* botão para dar um like */}
                 <button
-                  className="like-button"
+                  className={`like-button ${question.likeId ? 'liked' : ''}`}
                   type="button"
                   aria-label="Marcar como gostei"
                   // toda vez que for passar uma função pelo onClick que precisa de parâmetro, deve passar desse jeito
-                  onClick={() => handleLikeQuestion(question.id)}
+                  onClick={() => handleLikeQuestion(question.id, question.likeId)}
                 >
-                  <span>10</span>
+                  {/* só mostra o span se estiver um ou mais likes */}
+                  { question.likeCount > 0 && <span>{question.likeCount}</span>}
                   {/* esse svg é uma imagem que está dentro de assets/images, chama like.svg
                   coloca o svg em vez da img, pq vai ter que trocar a cor da imagem, e só dá para trocar a cor se colocar o svg aqui */}
                   {/* qdo for passar um svg assim, dar uma olhada se não tem propriedade com ífen, se estiver, deve alterar tirando o ífen e sempre a depois do ífen vem com letra maiúscula */}

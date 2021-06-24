@@ -54,6 +54,12 @@ export function Home() {
       return;
     }
 
+    // não deixa entrar na sala caso ela foi encerrada pelo admin
+    if (roomRef.val().endedAt) {
+      alert('Room already closed.')
+      return;
+    }
+
     // redireciona o usuário para sala existente. A sala que ele digitou, pois ode ter varias salas
     history.push(`/rooms/${roomCode}`)
 

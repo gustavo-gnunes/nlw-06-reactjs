@@ -3,18 +3,20 @@
 // página de salas
 
 // para pegar os parametros da página "a url da página web"
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import logoImg from '../assets/images/logo.svg';
+import deleteImg from '../assets/images/delete.svg';
 
 import { Button } from '../componets/Button';
 import { RoomCode } from '../componets/RoomCode';
 import { Question } from '../componets/Question';
 
-import { useAuth } from '../hooks/useAuth';
+// import { useAuth } from '../hooks/useAuth';
 // esse hook ser para listar todas as perguntas para mostrar em tela
 import { useRoom } from '../hooks/useRoom'; 
 
 import '../styles/room.scss';
+import { database } from '../sevices/firebase';
 
 type RoomParams = {
   id: string;
@@ -22,7 +24,7 @@ type RoomParams = {
 
 export function AdminRoom() {
   // const { user } = useAuth();
-  
+  const history = useHistory();
   // pega a url do navegador
   const params = useParams<RoomParams>();
   // .id, pq la no App.tsx eu passo a rota como /rooms/:id"
@@ -32,6 +34,27 @@ export function AdminRoom() {
   // tenho acesso ao  title e questions, pq está sendo retornada lá do hook useRoom elas
   const { title, questions } = useRoom(roomId);
 
+  // encerrar uma sala
+  async function handleEndRoom() {
+    // update-> para alterar os dados da sala
+    await database.ref(`rooms/${roomId}`).update({
+      // para dizer que a sala foi encerrada
+      endedAt: new Date()
+    })
+
+    // depois que encerrar a sala, redirecionar o admin para home
+    history.push('/');
+  }
+
+  // remover um pergunta
+  async function handleDeleteQuestion(questionId: string) {
+    // confirm-> é do próprio JS
+    if (window.confirm('Tem certeza que você deseja excluir está pergunta?')) {
+      // se confirmar, api sim fazer a remoção
+      await database.ref(`rooms/${roomId}/questions/${questionId}`).remove();
+    }
+  }
+
   return (
     <div id="page-room">
       <header>
@@ -39,7 +62,7 @@ export function AdminRoom() {
           <img src={logoImg} alt="Letmeask" />
           <div>
             <RoomCode code={roomId}/>
-            <Button isOutlined>Encerrar sala</Button>
+            <Button isOutlined onClick={handleEndRoom}>Encerrar sala</Button>
           </div>
           
         </div>
@@ -65,7 +88,17 @@ export function AdminRoom() {
                 key={question.id}
                 content={question.content}
                 author={question.author}
-              />
+              >
+              
+                {/* add ícone para remover uma pergunta */}
+                <button
+                  type="button"
+                  // toda vez que for passar uma função pelo onClick que precisa de parâmetro, deve passar desse jeito
+                  onClick={() => handleDeleteQuestion(question.id)}
+                >
+                  <img src={deleteImg} alt="Remover pergunta" />
+                </button>
+              </Question>
             );
           })}
         </div>

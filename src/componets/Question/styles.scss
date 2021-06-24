@@ -55,7 +55,8 @@
           color: #835afd;
 
           svg path {
-            stroke: #835afd; // muda a cor em volta da imagem. fill-> muda a cor de dentro
+            // como o ícone é só um fio "é só um contorno", a estilização fica no stroke, se for um ícone preenchido a estilização fica no fill
+            stroke: #835afd;
           }
         }
       }
