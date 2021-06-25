@@ -1,11 +1,12 @@
 // página de sala do admin
 
-// página de salas
-
 // para pegar os parametros da página "a url da página web"
 import { useHistory, useParams } from 'react-router-dom';
+
 import logoImg from '../assets/images/logo.svg';
 import deleteImg from '../assets/images/delete.svg';
+import checkImg from '../assets/images/check.svg';
+import answerImg from '../assets/images/answer.svg';
 
 import { Button } from '../componets/Button';
 import { RoomCode } from '../componets/RoomCode';
@@ -50,9 +51,25 @@ export function AdminRoom() {
   async function handleDeleteQuestion(questionId: string) {
     // confirm-> é do próprio JS
     if (window.confirm('Tem certeza que você deseja excluir está pergunta?')) {
-      // se confirmar, api sim fazer a remoção
+      // faz a remoção
       await database.ref(`rooms/${roomId}/questions/${questionId}`).remove();
     }
+  }
+
+  // marcar uma pergunta como respondida "com uma cor diferente"
+  // qdo estiver isAnswered: true, é pq clicou no botão do ícone checkImg
+  async function handleCheckQuestionAsAnswered(questionId: string) {
+    await database.ref(`rooms/${roomId}/questions/${questionId}`).update({
+      isAnswered: true,
+    });
+  }
+
+  // deixa a pergunta em destaque "com uma cor diferente"
+  // qdo estiver isAnswered: true, é pq clicou no botão do ícone answerImg
+  async function handleHighlightQuestion(questionId: string) {
+    await database.ref(`rooms/${roomId}/questions/${questionId}`).update({
+      isHighlighted: true,
+    });
   }
 
   return (
@@ -88,7 +105,34 @@ export function AdminRoom() {
                 key={question.id}
                 content={question.content}
                 author={question.author}
+                isAnswered={question.isAnswered}
+                isHighlighted={question.isHighlighted}
               >
+
+                {/* só entra se a pergunta não estiver respondida. Caso estiver respondida, não mostra esses dois botões */}
+                {!question.isAnswered && (
+                  <>
+                    {/* add ícone para checar uma pergunta como respondida */}
+                    <button
+                      type="button"
+                      // toda vez que for passar uma função pelo onClick que precisa de parâmetro, deve passar desse jeito
+                      onClick={() => handleCheckQuestionAsAnswered(question.id)}
+                    >
+                      <img src={checkImg} alt="Marcar pergunta como respondida" />
+                    </button>
+
+                    {/* add ícone para responder uma pergunta */}
+                    <button
+                      type="button"
+                      // toda vez que for passar uma função pelo onClick que precisa de parâmetro, deve passar desse jeito
+                      onClick={() => handleHighlightQuestion(question.id)}
+                    >
+                      <img src={answerImg} alt="Dar destaque à pergunta" />
+                    </button>
+                  </>
+                )}
+
+                
               
                 {/* add ícone para remover uma pergunta */}
                 <button
