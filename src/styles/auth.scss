@@ -3,6 +3,12 @@
   align-items: stretch; // estica para caber na largura total
   height: 100vh; // ocupar o tamanho total da altura da tela
 
+  // se a className for dark, usa essa estilização
+  &.dark {
+    background: #333;
+    color: #fff;
+  }
+
   aside {
     flex: 7;
 

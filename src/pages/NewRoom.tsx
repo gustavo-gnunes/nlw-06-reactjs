@@ -8,6 +8,7 @@ import { Link, useHistory } from 'react-router-dom';
 // import { AuthContext } from '../contexts/AuthContext';
 // deixo de imortar o useContext e AuthContext, para importar o useAuth, que tem essas duas importações já importadas nele
 import { useAuth } from '../hooks/useAuth';
+import { useTheme } from '../hooks/useTheme';
 
 import illustrationImg from '../assets/images/illustration.svg';
 import logoImg from '../assets/images/logo.svg';
@@ -19,6 +20,7 @@ import '../styles/auth.scss';
 
 export function NewRoom() {
   const { user } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const history = useHistory();
   // posso usar um useState para pegar o valor de um input "pegar o que o usuário digitou no input"
   const [newRoom, setNewRoom] = useState('');
@@ -54,7 +56,7 @@ export function NewRoom() {
   }
 
   return (
-    <div id="page-auth">
+    <div id="page-auth" className={theme}>
       <aside>
         <img src={illustrationImg} alt="Ilustração simbolizando perguntas e respostas" />
         <strong>Crie salas de Q&amp;A ao-vivo</strong> {/* &amp;-> para colocar o & na frase*/}
@@ -63,6 +65,9 @@ export function NewRoom() {
 
       <main>
         <div className="main-content">
+          <h1>{theme}</h1>
+          {/* qdo o usuário clicar no botão, chama a função toggleTheme, que está dentro do componente ThemeContext.tsx, na pasta context */}
+          <button onClick={toggleTheme}>Toggle</button>
           <img src={logoImg} alt="Letmeask" />
           <h2>Criar uma nova sala</h2>
           {/* coloca o onSubmit no form e não o onClick no botão, pq caso o usuário dar um enter no input o onSubmit é executado */}

@@ -14,7 +14,8 @@ import { Question } from '../componets/Question';
 
 // import { useAuth } from '../hooks/useAuth';
 // esse hook ser para listar todas as perguntas para mostrar em tela
-import { useRoom } from '../hooks/useRoom'; 
+import { useRoom } from '../hooks/useRoom';
+import { useTheme } from '../hooks/useTheme'; 
 
 import '../styles/room.scss';
 import { database } from '../sevices/firebase';
@@ -24,6 +25,7 @@ type RoomParams = {
 }
 
 export function AdminRoom() {
+  const { theme, toggleTheme } = useTheme();
   // const { user } = useAuth();
   const history = useHistory();
   // pega a url do navegador
@@ -73,10 +75,16 @@ export function AdminRoom() {
   }
 
   return (
-    <div id="page-room">
+    <div id="page-room" className={theme}>
       <header>
         <div className="content">
-          <img src={logoImg} alt="Letmeask" />
+          
+          <div className="div-dark">
+            <img src={logoImg} alt="Letmeask" />
+            <h1>{theme}</h1>
+            {/* qdo o usuário clicar no botão, chama a função toggleTheme, que está dentro do componente ThemeContext.tsx, na pasta context */}
+            <button className="btn-dark" onClick={toggleTheme}>Toggle</button>
+          </div>
           <div>
             <RoomCode code={roomId}/>
             <Button isOutlined onClick={handleEndRoom}>Encerrar sala</Button>

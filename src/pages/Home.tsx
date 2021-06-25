@@ -9,6 +9,7 @@ import { useHistory } from 'react-router-dom';
 // import { AuthContext } from '../contexts/AuthContext';
 // deixo de imortar o useContext e AuthContext, para importar o useAuth, que tem essas duas importações já importadas nele
 import { useAuth } from '../hooks/useAuth';
+import { useTheme } from '../hooks/useTheme';
 
 import illustrationImg from '../assets/images/illustration.svg';
 import logoImg from '../assets/images/logo.svg';
@@ -21,6 +22,8 @@ import '../styles/auth.scss';
 
 export function Home() {
   const history = useHistory();
+  const { theme, toggleTheme } = useTheme();
+
   const { user, signInWithGoogle } = useAuth();
   // para armazenar o código da sala que o usuário está tentando acessar "pega o que o usuário está digitando no input"
   const [roomCode, setRoomCode] = useState('');
@@ -66,7 +69,8 @@ export function Home() {
   }
 
   return (
-    <div id="page-auth">
+    // className= theme-> serve vai fazer a estilização no css, pra qdo estiver dark o fundo ficar escuro
+    <div id="page-auth" className={theme}>
       <aside>
         <img src={illustrationImg} alt="Ilustração simbolizando perguntas e respostas" />
         <strong>Crie salas de Q&amp;A ao-vivo</strong> {/* &amp;-> para colocar o & na frase*/}
@@ -75,6 +79,9 @@ export function Home() {
 
       <main>
         <div className="main-content">
+          <h1>{theme}</h1>
+          {/* qdo o usuário clicar no botão, chama a função toggleTheme, que está dentro do componente ThemeContext.tsx, na pasta context */}
+          <button onClick={toggleTheme}>Toggle</button>
           <img src={logoImg} alt="Letmeask" />
           <button onClick={handleCreateRoom} className="create-room">
             <img src={googleIconImg} alt="Logo do Google" />

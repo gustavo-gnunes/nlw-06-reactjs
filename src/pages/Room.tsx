@@ -10,6 +10,7 @@ import { RoomCode } from '../componets/RoomCode';
 import { Question } from '../componets/Question';
 
 import { useAuth } from '../hooks/useAuth';
+import { useTheme } from '../hooks/useTheme';
 // esse hook ser para listar todas as perguntas para mostrar em tela
 import { useRoom } from '../hooks/useRoom'; 
 import { database } from '../sevices/firebase';
@@ -22,6 +23,7 @@ type RoomParams = {
 
 export function Room() {
   const { user } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   // "pegar o que o usuário digitou no input"
   const [newQuestion, setNewQuestion] = useState('');
   
@@ -86,18 +88,23 @@ export function Room() {
   }
 
   return (
-    <div id="page-room">
+    <div id="page-room" className={theme}>
       <header>
         <div className="content">
-          <img src={logoImg} alt="Letmeask" />
-          {/*  */}
+          
+          <div className="div-dark">
+            <img src={logoImg} alt="Letmeask" />
+            <h1>{theme}</h1>
+            {/* qdo o usuário clicar no botão, chama a função toggleTheme, que está dentro do componente ThemeContext.tsx, na pasta context */}
+            <button className="btn-dark" onClick={toggleTheme}>Toggle</button>
+          </div>
           <RoomCode code={roomId}/>
         </div>
       </header>
 
       <main>
         <div className="room-title">
-          <h1>Sala {title}</h1>
+          <h1>{title}</h1>
           {/* qdo não precisa usar o else, o if pode colocar && */}
           {/* se estiver uma pergunta ou mais */}
           {/* question.length-> quantidades de perguntas */}
